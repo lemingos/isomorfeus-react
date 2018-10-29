@@ -144,8 +144,4 @@ module React
   def self.isValidElement(react_element)
     `React.isValidElement(react_element)`
   end
-
-  def self.lazy(import_statement_function)
-    `React.lazy(import_statement_function)`
-  end
 end

@@ -1,22 +1,22 @@
 module React
-  module FunctionalComponent
+  module FunctionComponent
     class Creator
       def self.event_handler(name, &block)
         %x{
-          Opal.React.FunctionalComponent.Runner.event_handlers[name] = function(event, info) {
+          Opal.React.FunctionComponent.Runner.event_handlers[name] = function(event, info) {
             #{ruby_event = ::React::SyntheticEvent.new(`event`)};
-            #{React::FunctionalComponent::Runner.new(`{}`).instance_exec(ruby_event, `info`, &block)};
+            #{React::FunctionComponent::Runner.new(`{}`).instance_exec(ruby_event, `info`, &block)};
           }
         }
       end
 
-      def self.functional_component(component_name, &block)
+      def self.function_component(component_name, &block)
 
         %x{
           var fun = function(props) {
             Opal.React.render_buffer.push([]);
-            Opal.React.active_components.push(Opal.React.FunctionalComponent.Runner.event_handlers);
-            #{React::FunctionalComponent::Runner.new(`props`).instance_exec(&block)};
+            Opal.React.active_components.push(Opal.React.FunctionComponent.Runner.event_handlers);
+            #{React::FunctionComponent::Runner.new(`props`).instance_exec(&block)};
             Opal.React.active_components.pop();
             return Opal.React.render_buffer.pop();
           }

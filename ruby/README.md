@@ -115,15 +115,15 @@ Its recommended to use them only if no props or state are used or if props and s
 **Data flow of a React::PureComponent:**
 ![React::PureComponent Data Flow](https://raw.githubusercontent.com/isomorfeus/isomorfeus-react/master/images/data_flow_component.png)
 
-### Functional Components
-Functional Components are created using a Ruby DSL that is used within the creator class:
+### Function Components
+Function Components are created using a Ruby DSL that is used within the creator class:
 ```ruby
-class React::FunctionalComponent::Creator
-  functional_component 'MyComponent' do |props|
+class React::FunctionComponent::Creator
+  function_component 'MyComponent' do |props|
     SPAN { props.text }
   end
   # Javascript .-notation can be used for the component name:
-  functional_component 'MyObject.MyComponent' do |props|
+  function_component 'MyObject.MyComponent' do |props|
     SPAN { props.text }
   end
 end
@@ -132,7 +132,7 @@ This creates a native javascript components.
 The file containing the creator must be explicitly required, because the automatic resolution of Javascript constant names
 is not done by opal-autoloader.
  
-A Functional Component can then be used in other Components:
+A Function Component can then be used in other Components:
 ```ruby
 class MyComponent < React::PureComponent::Base
   render do
@@ -146,8 +146,8 @@ To get the native component, for example to pass it in props, javascript inlinin
 Route(path: '/fun_fun/:count', exact: true, component: `MyObject.MyComponent`)
 ```
 
-**Data flow of a React::FunctionalComponent:**
-![React::FunctionalComponent Data Flow](https://raw.githubusercontent.com/isomorfeus/isomorfeus-react/master/images/data_flow_functional_component.png)
+**Data flow of a React::FunctionComponent:**
+![React::FunctionComponent Data Flow](https://raw.githubusercontent.com/isomorfeus/isomorfeus-react/master/images/data_flow_function_component.png)
 
 ### Props
 In ruby props are underscored: `className -> class_name`. The conversion for React is done automatically.
@@ -309,11 +309,11 @@ end
 ```
 Targets of the event, like current_target, are wrapped Elements as supplied by opal-browser.
 
-#### Events and Functional Components
-The event_handler DSL can be used within the React::FunctionalComponent::Creator. However, functional component dont react by themselves to events,
+#### Events and Function Components
+The event_handler DSL can be used within the React::FunctionComponent::Creator. However, function component dont react by themselves to events,
 the event handler must be applied to a element.
 ```ruby
-class React::FunctionalComponent::Creator
+class React::FunctionComponent::Creator
   event_handler :show_red_alert do |event|
     `alert("RED ALERT!")`
   end
@@ -322,12 +322,12 @@ class React::FunctionalComponent::Creator
     `alert("ORANGE ALERT!")`
   end
 
-  functional_component 'AFunComponent' do
+  function_component 'AFunComponent' do
     SPAN(on_click: props.on_click) { 'Click for orange alert! ' } # event handler passed in props, applied to a element
     SPAN(on_click: :show_red_alert) { 'Click for red alert! '  } # event handler directly applied to a element
   end
 
-  functional_component 'AnotherFunComponent' do
+  function_component 'AnotherFunComponent' do
     AFunComponent(on_click: :show_orange_alert, text: 'Fun') # event handler passed as prop, but must be applied to element, see above
   end
 end
@@ -466,7 +466,7 @@ It can be accessed by using Opals JS syntax to get the React Component of the Ru
 ```ruby
 Route(path: '/', strict: true, component: MyComponent.JS[:react_component])
 ```
-Native Javascript components can be passed using the Javascript inlining of Opal, this also works for functional components:
+Native Javascript components can be passed using the Javascript inlining of Opal, this also works for function components:
 ```ruby
 Route(path: '/a_button', strict: true, component: `Sem.Button`)
 ```

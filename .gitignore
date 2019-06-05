@@ -31,11 +31,12 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
-/public/packs-test
-/node_modules
+/ruby/test_app/public/assets
+node_modules
 yarn-debug.log*
 .yarn-integrity
 .DS_Store
+yarn.lock
 
 /vendor/bundle
 Gemfile.lock

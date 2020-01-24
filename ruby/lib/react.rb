@@ -70,15 +70,19 @@ module React
               if (active_component.method_refs && active_component.method_refs[handler]) { method_ref = active_component.method_refs[handler]; }
               else { method_ref = active_component.__ruby_instance.$method_ref(handler); } // create ref for native
             }
-            if (!method_ref.react_event_handler_function) {
-              method_ref.react_event_handler_function = function(event, info) {
-                let ruby_event;
-                if (typeof event === "object") { #{ruby_event = ::React::SyntheticEvent.new(`event`)}; }
-                else { ruby_event = event; }
-                method_ref.$call(ruby_event, `info`)
-              };
+            if (method_ref === undefined) {
+              console.error("Undefined method " + handler + ", please use \"method_ref\" to pass methods within the components.", self.active_component());
+            } else {
+              if (!method_ref.react_event_handler_function) {
+                method_ref.react_event_handler_function = function(event, info) {
+                  let ruby_event;
+                  if (typeof event === "object") { #{ruby_event = ::React::SyntheticEvent.new(`event`)}; }
+                  else { ruby_event = event; }
+                  method_ref.$call(ruby_event, `info`)
+                };
+              }
+              result[Opal.React.lower_camelize(key)] = method_ref.react_event_handler_function;
             }
-            result[Opal.React.lower_camelize(key)] = method_ref.react_event_handler_function;
           } else {
             console.error("Received invalid value for " + key + " event handler:", handler, "(", type, ") within component:", self.active_component());
           }
